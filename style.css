@@ -15,11 +15,36 @@ body {
     background: #f6f6f6;
     color: #111;
     padding: 20px;
+    padding-top: 180px; /* espacio correcto para header + nav */
 }
 
+/* =====================
+   HEADER FIJO
+===================== */
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* =====================
+   HEADER TOP
+===================== */
+.header-top {
+    width: 100%;
+    background: #f6f6f6;
+    padding: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* centro título */
+.header-center {
     text-align: center;
-    margin-bottom: 20px;
 }
 
 header h1 {
@@ -27,29 +52,80 @@ header h1 {
     letter-spacing: 3px;
 }
 
-/* =====================
-   SEARCH
-===================== */
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+header p {
+    margin-top: 5px;
 }
 
 /* =====================
-   NAV FILTERS (PRO TABS)
+   CARRITO HEADER
 ===================== */
-nav {
+.header-right {
+    position: absolute;
+    right: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    background: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.cart-icon {
+    position: relative;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.cart-icon span {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #25D366;
+    color: white;
+    font-size: 12px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.cart-total-header {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* =====================
+   NAV FILTROS + SEARCH
+===================== */
+nav.filters {
+    position: fixed;
+    top: 110px;
+    left: 0;
+    width: 100%;
+
     display: flex;
     gap: 10px;
     justify-content: center;
-    margin: 15px 0;
+    align-items: center;
     flex-wrap: wrap;
+
+    padding: 10px;
+    background: #f6f6f6;
+    z-index: 999;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-nav button {
+/* botones filtros */
+nav.filters button {
     padding: 8px 16px;
     border-radius: 999px;
     border: 1px solid transparent;
@@ -60,16 +136,22 @@ nav button {
     font-size: 13px;
 }
 
-nav button:hover {
+nav.filters button:hover {
     transform: scale(1.05);
 }
 
-nav button.active {
+nav.filters button.active {
     background: #25D366;
-    color: white;
     border: 1px solid #1db954;
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-    transform: scale(1.05);
+}
+
+/* input búsqueda */
+nav.filters input {
+    width: 220px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
 }
 
 /* =====================
@@ -81,6 +163,7 @@ nav button.active {
     gap: 15px;
 }
 
+/* cards */
 .card {
     background: white;
     border-radius: 12px;
@@ -109,7 +192,7 @@ nav button.active {
 }
 
 /* =====================
-   ACTIONS (PRO UX)
+   ACTIONS
 ===================== */
 .actions {
     display: flex;
@@ -143,6 +226,7 @@ nav button.active {
     border-radius: 12px;
 }
 
+/* items carrito */
 .cart-item {
     display: flex;
     justify-content: space-between;

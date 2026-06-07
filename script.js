@@ -101,25 +101,27 @@ document.addEventListener("DOMContentLoaded", () => {
             total += p.precio * p.cantidad;
 
             cont.innerHTML += `
-        <div class="cart-item">
-            <div class="cart-left">
-                <p class="name">${p.nombre}</p>
+    <div class="cart-item">
+        <div class="cart-left">
+            <p class="name">${p.nombre}</p>
 
-                <div class="qty">
-                    <button onclick="changeQty(${p.id}, -1)">−</button>
-                    <span>${p.cantidad}</span>
-                    <button onclick="changeQty(${p.id}, 1)">+</button>
-                </div>
-            </div>
-
-            <div class="cart-right">
-                <p>$${formatPrice(p.precio * p.cantidad)}</p>
+            <div class="qty">
+                <button onclick="changeQty(${p.id}, -1)">−</button>
+                <span>${p.cantidad}</span>
+                <button onclick="changeQty(${p.id}, 1)">+</button>
             </div>
         </div>
-        `;
+
+        <div class="cart-right">
+            <p>$${formatPrice(p.precio * p.cantidad)}</p>
+        </div>
+    </div>
+    `;
         });
 
         document.getElementById("total").innerText = formatPrice(total);
+
+        updateCartCount();
     }
 
     /* =========================
@@ -229,8 +231,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         renderUI();
         renderCart();
+        updateCartCount();
+    }
+    /* =========================
+       🛒 CONTADOR CARRITO
+    ========================= */
+    function updateCartCount() {
+
+        const totalItems = carrito.reduce(
+            (sum, item) => sum + item.cantidad,
+            0
+        );
+
+        const totalPrice = carrito.reduce(
+            (sum, item) => sum + (item.precio * item.cantidad),
+            0
+        );
+
+        const badge = document.getElementById("cartCount");
+        const headerTotal = document.getElementById("headerTotal");
+
+        if (badge) {
+            badge.innerText = totalItems;
+            badge.style.display = totalItems ? "flex" : "none";
+        }
+
+        if (headerTotal) {
+            headerTotal.innerText = formatPrice(totalPrice);
+        }
     }
 
+    /* =========================
+       📍 IR AL CARRITO
+    ========================= */
+    window.scrollToCart = function () {
+
+        document.querySelector(".cart").scrollIntoView({
+            behavior: "smooth"
+        });
+
+    };
     loadProducts();
 
 });

@@ -4,24 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cocodite | Store</title>
+    <title>Resgina Shop</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <header>
-        <h1>COCODITE</h1>
-        <p>Zapatillas & Indumentaria</p>
 
-        <input type="text" id="search" placeholder="Buscar productos...">
+        <div class="header-top">
+
+            <div class="header-center">
+                <h1>Regina Shop</h1>
+                <p>Zapatillas & Indumentaria</p>
+            </div>
+
+            <div class="header-right">
+
+                <div class="cart-icon" onclick="scrollToCart()">
+                    🛒
+                    <span id="cartCount">0</span>
+                </div>
+
+                <div class="cart-total-header">
+                    $<span id="headerTotal">0</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 🔎 MANTENEMOS LA BÚSQUEDA 
+        <input type="text" id="search" placeholder="Buscar productos...">-->
+
     </header>
 
-    <nav>
-        <button id="btn-todos" onclick="filtrar('todos', this)">Todos</button>
-        <button onclick="filtrar('zapatillas', this)">Zapatillas</button>
-        <button onclick="filtrar('ropa', this)">Indumentaria</button>
-    </nav>
+  <nav class="filters">
+
+    <button id="btn-todos" onclick="filtrar('todos', this)">Todos</button>
+    <button onclick="filtrar('zapatillas', this)">Zapatillas</button>
+    <button onclick="filtrar('ropa', this)">Indumentaria</button>
+
+    <input type="text" id="search" placeholder="Buscar productos...">
+
+</nav>
 
     <section id="productos" class="grid"></section>
 
