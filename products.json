@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "nombre": "Nike Air Force",
+    "precio": 120000,
+    "categoria": "zapatillas",
+    "imagen": "images/i1.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Adidas Superstar",
+    "precio": 110000,
+    "categoria": "zapatillas",
+    "imagen": "images/i2.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Buzo Oversize Negro",
+    "precio": 45000,
+    "categoria": "ropa",
+    "imagen": "images/i3.jpg"
+  },
+  {
+    "id": 4,
+    "nombre": "Remera Basic White",
+    "precio": 25000,
+    "categoria": "ropa",
+    "imagen": "images/i4.jpg"
+  }
+]

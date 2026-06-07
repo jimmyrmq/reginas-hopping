@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocodite | Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>COCODITE</h1>
+        <p>Zapatillas & Indumentaria</p>
+
+        <input type="text" id="search" placeholder="Buscar productos...">
+    </header>
+
+    <nav>
+        <button id="btn-todos" onclick="filtrar('todos', this)">Todos</button>
+        <button onclick="filtrar('zapatillas', this)">Zapatillas</button>
+        <button onclick="filtrar('ropa', this)">Indumentaria</button>
+    </nav>
+
+    <section id="productos" class="grid"></section>
+
+    <section class="cart">
+        <h2>Carrito</h2>
+
+        <div id="cartItems"></div>
+
+        <h3>Total: $<span id="total">0</span></h3>
+
+        <button class="whatsapp" onclick="enviarWhatsApp()">
+            Enviar pedido por WhatsApp
+        </button>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
