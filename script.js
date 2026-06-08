@@ -101,13 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                         <div class="actions">
                             <button onclick="changeQty(${p.id}, -1, '${selectedSizes[p.id]}')" ${sinTalla ? 'disabled' : ''} class="${sinTalla ? 'disabled' : ''}">−</button>
-                            <button
-                                onclick="add(${p.id})"
-                                ${sinTalla ? 'disabled' : ''}
-                                class="add-btn ${sinTalla ? 'disabled' : ''}"
-                            >
-                                ${cantidad > 0 ? `✔ ${cantidad}` : (sinTalla ? "Seleccione la talla" : "Agregar")}
-                            </button>
+                            <span class="qty-display ${cantidad > 0 ? 'has-qty' : (sinTalla ? '' : 'zero-qty')}">${cantidad > 0 ? `✔ ${cantidad}` : (sinTalla ? 'Seleccione la talla' : '0')}</span>
                             <button onclick="changeQty(${p.id}, 1, '${selectedSizes[p.id]}')" ${sinTalla ? 'disabled' : ''} class="${sinTalla ? 'disabled' : ''}">+</button>
                         </div>
                     </div>
