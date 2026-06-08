@@ -373,6 +373,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     "_blank"
                 );
             }, 500);
+
+            // Limpiar carrito y recargar página (después de 1500ms)
+            setTimeout(() => {
+                localStorage.removeItem("carrito");
+                localStorage.removeItem("filtro");
+                location.reload();
+            }, 1500);
         });
     }
 
