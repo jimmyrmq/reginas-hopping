@@ -254,6 +254,8 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
        📲 WHATSAPP
     ========================= */
+    const aliasTransferencia = "Cocodite.Shoes"; // Alias para transferencia/depósito
+
     window.enviarWhatsApp = function () {
 
         if (carrito.length === 0) {
@@ -261,22 +263,118 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        let msg = "Hola Cocodite 👟%0A%0A";
-        let total = 0;
-
-        carrito.forEach(p => {
-            let sub = p.precio * p.cantidad;
-            total += sub;
-            msg += `- ${p.nombre} | Talla ${p.talla} x${p.cantidad}`;
-        });
-
-        msg += `%0A*TOTAL:* ${formatPrice(total)}`;
-
-        window.open(
-            `https://wa.me/${telefono}?text=${msg}`,
-            "_blank"
-        );
+        // Mostrar modal para datos de envío
+        document.getElementById("orderModal").style.display = "block";
     };
+
+    window.closeOrderModal = function () {
+        document.getElementById("orderModal").style.display = "none";
+    };
+
+    // Cerrar modal cuando se haga click fuera del contenido
+    window.onclick = function (event) {
+        const modal = document.getElementById("orderModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    // Manejar envío del formulario
+    const orderForm = document.getElementById("orderForm");
+    if (orderForm) {
+        orderForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById("customerName").value;
+            const direccion = document.getElementById("customerAddress").value;
+            let telefono_cliente = document.getElementById("customerPhone").value;
+            const detalles = document.getElementById("customerDetails").value;
+
+            // Validar teléfono: solo números, sin espacios ni caracteres especiales
+            if (!/^\d+$/.test(telefono_cliente)) {
+                alert("❌ El teléfono debe contener solo números, sin espacios ni caracteres especiales");
+                return;
+            }
+
+            // Limpiar prefijos internacionales si existen
+            let telefono_limpio = telefono_cliente;
+            if (telefono_limpio.startsWith("549")) {
+                telefono_limpio = telefono_limpio.substring(3); // Remover "549"
+            }
+            else if (telefono_limpio.startsWith("54")) {
+                // Si es "54" sin el "9", solo remover "54"
+                telefono_limpio = telefono_limpio.substring(2);
+            }
+
+            // Validar longitud: debe ser 8 o 10 dígitos
+            if (telefono_limpio.length !== 8 && telefono_limpio.length !== 10) {
+                alert(`❌ El teléfono debe tener 8 o 10 dígitos. Ingresaste: ${telefono_limpio.length}`);
+                return;
+            }
+
+            // Si tiene 8 dígitos, agregar "11" al inicio (número local de Buenos Aires)
+            if (telefono_limpio.length === 8) {
+                telefono_limpio = "11" + telefono_limpio;
+            }
+
+            // Agregar prefijo internacional "549"
+            telefono_cliente = "549" + telefono_limpio;
+
+            // Calcular total
+            let total = 0;
+            let productosTexto = "";
+            carrito.forEach(p => {
+                let sub = p.precio * p.cantidad;
+                total += sub;
+                productosTexto += `- ${p.nombre} | Talle ${p.talla} x${p.cantidad}%0A`;
+            });
+
+            // MENSAJE PARA EL NEGOCIO
+            let msgNegocio = "Hola Regina - Pedido 👟%0A%0A";
+            msgNegocio += `*CLIENTE:* ${nombre}%0A`;
+            msgNegocio += `*TELÉFONO:* ${telefono_cliente}%0A`;
+            msgNegocio += `*DIRECCIÓN:* ${direccion}%0A`;
+            if (detalles) {
+                msgNegocio += `*OBSERVACIONES:* ${detalles}%0A`;
+            }
+            msgNegocio += `%0A*PRODUCTOS:*%0A`;
+            msgNegocio += productosTexto;
+            msgNegocio += `%0A*TOTAL:* ${formatPrice(total)}`;
+
+            // MENSAJE PARA EL CLIENTE
+            let msgCliente = "¡Hola! 👟 Tu pedido en ReginaShop%0A%0A";
+            msgCliente += `*RESUMEN DE TU PEDIDO*%0A`;
+            msgCliente += `%0A*DATOS DE ENVÍO:*%0A`;
+            msgCliente += `📍 Dirección: ${direccion}%0A`;
+            msgCliente += `📞 Teléfono: ${telefono_cliente}%0A`;
+            msgCliente += `%0A*PRODUCTOS ORDENADOS:*%0A`;
+            msgCliente += productosTexto;
+            msgCliente += `*TOTAL A PAGAR:* ${formatPrice(total)}%0A`;
+            msgCliente += `%0A*DATOS PARA DEPOSITAR/TRANSFERIR:*%0A`;
+            msgCliente += `💳 Alias: *${aliasTransferencia}*%0A`;
+            msgCliente += `%0A¡Gracias por tu compra! 🎉`;
+
+            // Cerrar modal
+            document.getElementById("orderModal").style.display = "none";
+
+            // Limpiar formulario
+            orderForm.reset();
+
+            // Enviar mensaje al negocio
+            window.open(
+                `https://wa.me/${telefono}?text=${msgNegocio}`,
+                "_blank"
+            );
+
+            // Enviar copia del pedido al cliente (después de 500ms)
+            setTimeout(() => {
+                window.open(
+                    `https://wa.me/${telefono_cliente}?text=${msgCliente}`,
+                    "_blank"
+                );
+            }, 500);
+        });
+    }
 
     /* =========================
        🚀 INIT
