@@ -253,6 +253,13 @@ nav.filters input {
     min-height: 30px;
 }
 
+.qty-display.select-size {
+    font-size: 10px;
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
 .qty-display.zero-qty {
     color: #666;
 }

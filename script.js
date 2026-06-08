@@ -100,8 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             ${tallasHTML}
                         </div>
                         <div class="actions">
+                            <!-- ✔ -->
                             <button onclick="changeQty(${p.id}, -1, '${selectedSizes[p.id]}')" ${sinTalla ? 'disabled' : ''} class="${sinTalla ? 'disabled' : ''}">−</button>
-                            <span class="qty-display ${cantidad > 0 ? 'has-qty' : (sinTalla ? '' : 'zero-qty')}">${cantidad > 0 ? `✔ ${cantidad}` : (sinTalla ? 'Seleccione la talla' : '0')}</span>
+                            <span class="qty-display ${cantidad > 0 ? 'has-qty' : (sinTalla ? 'select-size' : 'zero-qty')}">${cantidad > 0 ? `${cantidad}` : (sinTalla ? 'Seleccione la talla' : '0')}</span>
                             <button onclick="changeQty(${p.id}, 1, '${selectedSizes[p.id]}')" ${sinTalla ? 'disabled' : ''} class="${sinTalla ? 'disabled' : ''}">+</button>
                         </div>
                     </div>
@@ -136,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </p>
 
 <p class="size-cart">
-    Talle: ${p.talla}
+    Talla: ${p.talla}
 </p>
 
             <div class="qty">
@@ -266,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
         carrito.forEach(p => {
             let sub = p.precio * p.cantidad;
             total += sub;
-            msg += `- ${p.nombre} | Talle ${p.talla} x${p.cantidad}`;
+            msg += `- ${p.nombre} | Talla ${p.talla} x${p.cantidad}`;
         });
 
         msg += `%0A*TOTAL:* ${formatPrice(total)}`;
