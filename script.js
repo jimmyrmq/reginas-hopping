@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-
+    let selectedSizes = {};
     const telefono = "5491127824001";
 
     /* =========================
@@ -14,7 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
        💰 FORMATO PRECIO
     ========================= */
     function formatPrice(value) {
-        return new Intl.NumberFormat("es-AR").format(value);
+        return new Intl.NumberFormat("es-AR", {
+            style: "currency",
+            currency: "ARS",
+            maximumFractionDigits: 0
+        }).format(value);
     }
 
     /* =========================
@@ -53,32 +57,62 @@ document.addEventListener("DOMContentLoaded", () => {
     ========================= */
     function renderProductos(list) {
         const cont = document.getElementById("productos");
+
+        if (list.length === 0) {
+            cont.innerHTML = `
+                <div class="empty-products">
+                    No se encontraron productos
+                </div>
+            `;
+            return;
+        }
+
         cont.innerHTML = "";
 
         list.forEach(p => {
+            if (!selectedSizes[p.id]) {
+                selectedSizes[p.id] = null;
+            }
 
             let item = carrito.find(c => c.id === p.id);
             let cantidad = item ? item.cantidad : 0;
 
-            cont.innerHTML += `
-        <div class="card">
-            <img src="${p.imagen}">
-            <div class="card-body">
-                <h3>${p.nombre}</h3>
-                <p class="price">$${formatPrice(p.precio)}</p>
-
-                <div class="actions">
-                    <button onclick="changeQty(${p.id}, -1)">−</button>
-
-                    <button onclick="add(${p.id})">
-                        ${cantidad > 0 ? `✔ ${cantidad}` : "Agregar"}
+            const tallasHTML = (p.tallas || [])
+                .map(t => `
+                    <button
+                        class="size-btn ${selectedSizes[p.id] === t.numero ? 'selected' : ''} ${t.stock === 0 ? 'agotado' : ''}"
+                        ${t.stock === 0 ? 'disabled' : ''}
+                        onclick="selectSize(${p.id}, '${t.numero}')"
+                    >
+                        ${t.numero}
                     </button>
+                `)
+                .join('');
 
-                    <button onclick="changeQty(${p.id}, 1)">+</button>
+            const sinTalla = !selectedSizes[p.id];
+            cont.innerHTML += `
+                <div class="card">
+                    <img src="${p.imagen}" alt="${p.nombre}">
+                    <div class="card-body">
+                        <h3>${p.nombre}</h3>
+                        <p class="price">${formatPrice(p.precio)}</p>
+                        <div class="sizes">
+                            ${tallasHTML}
+                        </div>
+                        <div class="actions">
+                            <button onclick="changeQty(${p.id}, -1, '${selectedSizes[p.id]}')" ${sinTalla ? 'disabled' : ''} class="${sinTalla ? 'disabled' : ''}">−</button>
+                            <button
+                                onclick="add(${p.id})"
+                                ${sinTalla ? 'disabled' : ''}
+                                class="add-btn ${sinTalla ? 'disabled' : ''}"
+                            >
+                                ${cantidad > 0 ? `✔ ${cantidad}` : (sinTalla ? "Seleccione la talla" : "Agregar")}
+                            </button>
+                            <button onclick="changeQty(${p.id}, 1, '${selectedSizes[p.id]}')" ${sinTalla ? 'disabled' : ''} class="${sinTalla ? 'disabled' : ''}">+</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        `;
+            `;
         });
     }
 
@@ -103,17 +137,23 @@ document.addEventListener("DOMContentLoaded", () => {
             cont.innerHTML += `
     <div class="cart-item">
         <div class="cart-left">
-            <p class="name">${p.nombre}</p>
+            <p class="name">
+    ${p.nombre}
+</p>
+
+<p class="size-cart">
+    Talle: ${p.talla}
+</p>
 
             <div class="qty">
-                <button onclick="changeQty(${p.id}, -1)">−</button>
+                <button onclick="changeQty(${p.id}, -1, '${p.talla}')">−</button>
                 <span>${p.cantidad}</span>
-                <button onclick="changeQty(${p.id}, 1)">+</button>
+                <button onclick="changeQty(${p.id}, 1, '${p.talla}')">+</button>
             </div>
         </div>
 
         <div class="cart-right">
-            <p>$${formatPrice(p.precio * p.cantidad)}</p>
+            <p>${formatPrice(p.precio * p.cantidad)}</p>
         </div>
     </div>
     `;
@@ -129,13 +169,30 @@ document.addEventListener("DOMContentLoaded", () => {
     ========================= */
     window.add = function (id) {
 
-        let item = carrito.find(p => p.id === id);
+        const talla = selectedSizes[id];
+
+        if (!talla) {
+            alert("Seleccioná una talla antes de agregar al carrito");
+            return;
+        }
+
         let prod = productos.find(p => p.id === id);
+
+        let item = carrito.find(
+            p => p.id === id && p.talla === talla
+        );
 
         if (item) {
             item.cantidad++;
         } else {
-            carrito.push({ ...prod, cantidad: 1 });
+            carrito.push({
+                id: prod.id,
+                nombre: prod.nombre,
+                precio: prod.precio,
+                imagen: prod.imagen,
+                talla: talla,
+                cantidad: 1
+            });
         }
 
         saveCart();
@@ -143,18 +200,29 @@ document.addEventListener("DOMContentLoaded", () => {
         renderUI();
     };
 
-    window.changeQty = function (id, delta) {
+    window.changeQty = function (id, delta, talla) {
 
-        let item = carrito.find(p => p.id === id);
+        let item = carrito.find(
+            p => p.id === id && p.talla === talla
+        );
 
         if (!item && delta > 0) {
             let prod = productos.find(p => p.id === id);
-            carrito.push({ ...prod, cantidad: 1 });
+            carrito.push({
+                id: prod.id,
+                nombre: prod.nombre,
+                precio: prod.precio,
+                imagen: prod.imagen,
+                talla: talla,
+                cantidad: 1
+            });
         } else if (item) {
             item.cantidad += delta;
 
             if (item.cantidad <= 0) {
-                carrito = carrito.filter(p => p.id !== id);
+                carrito = carrito.filter(
+                    p => !(p.id === id && p.talla === talla)
+                );
             }
         }
 
@@ -204,11 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
         carrito.forEach(p => {
             let sub = p.precio * p.cantidad;
             total += sub;
-
-            msg += `- ${p.nombre} x${p.cantidad} = $${formatPrice(sub)}%0A`;
+            msg += `- ${p.nombre} | Talle ${p.talla} x${p.cantidad}`;
         });
 
-        msg += `%0A*TOTAL:* $${formatPrice(total)}`;
+        msg += `%0A*TOTAL:* ${formatPrice(total)}`;
 
         window.open(
             `https://wa.me/${telefono}?text=${msg}`,
@@ -271,6 +338,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     };
+
+    window.selectSize = function (id, talla) {
+
+        selectedSizes[id] = talla;
+
+        renderUI();
+    };
+
     loadProducts();
 
 });

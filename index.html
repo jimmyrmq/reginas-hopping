@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="cart-total-header">
-                    $<span id="headerTotal">0</span>
+                    <span id="headerTotal">$0</span>
                 </div>
 
             </div>
@@ -39,13 +39,17 @@
 
     </header>
 
-  <nav class="filters">
+<nav class="filters">
 
-    <button id="btn-todos" onclick="filtrar('todos', this)">Todos</button>
-    <button onclick="filtrar('zapatillas', this)">Zapatillas</button>
-    <button onclick="filtrar('ropa', this)">Indumentaria</button>
+    <div class="filter-buttons">
+        <button id="btn-todos" onclick="filtrar('todos', this)">Todos</button>
+        <button onclick="filtrar('zapatillas', this)">Zapatillas</button>
+        <button onclick="filtrar('ropa', this)">Indumentaria</button>
+    </div>
 
-    <input type="text" id="search" placeholder="Buscar productos...">
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Buscar productos...">
+    </div>
 
 </nav>
 
@@ -56,11 +60,12 @@
 
         <div id="cartItems"></div>
 
-        <h3>Total: $<span id="total">0</span></h3>
+        <h3>Total: <span id="total">$0</span></h3>
 
         <button class="whatsapp" onclick="enviarWhatsApp()">
-            Enviar pedido por WhatsApp
+            Enviar pedido por WhatsApp            
         </button>
+
     </section>
 
     <script src="script.js"></script>

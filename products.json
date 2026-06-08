@@ -4,27 +4,53 @@
     "nombre": "Nike Air Force",
     "precio": 120000,
     "categoria": "zapatillas",
-    "imagen": "images/i1.jpg"
+    "imagen": "images/i1.jpg",
+    "tallas": [
+      { "numero": "40", "stock": 2 },
+      { "numero": "41", "stock": 5 },
+      { "numero": "42", "stock": 0 },
+      { "numero": "43", "stock": 3 },
+      { "numero": "44", "stock": 1 }
+    ]
   },
   {
     "id": 2,
     "nombre": "Adidas Superstar",
     "precio": 110000,
     "categoria": "zapatillas",
-    "imagen": "images/i2.jpg"
+    "imagen": "images/i2.jpg",
+    "tallas": [
+      { "numero": "39", "stock": 0 },
+      { "numero": "40", "stock": 4 },
+      { "numero": "41", "stock": 2 },
+      { "numero": "42", "stock": 1 },
+      { "numero": "43", "stock": 0 }
+    ]
   },
   {
     "id": 3,
     "nombre": "Buzo Oversize Negro",
     "precio": 45000,
     "categoria": "ropa",
-    "imagen": "images/i3.jpg"
+    "imagen": "images/i3.jpg",
+    "tallas": [
+      { "numero": "S", "stock": 3 },
+      { "numero": "M", "stock": 5 },
+      { "numero": "L", "stock": 2 },
+      { "numero": "XL", "stock": 0 }
+    ]
   },
   {
     "id": 4,
     "nombre": "Remera Basic White",
     "precio": 25000,
     "categoria": "ropa",
-    "imagen": "images/i4.jpg"
+    "imagen": "images/i4.jpg",
+    "tallas": [
+      { "numero": "S", "stock": 0 },
+      { "numero": "M", "stock": 6 },
+      { "numero": "L", "stock": 4 },
+      { "numero": "XL", "stock": 2 }
+    ]
   }
 ]
